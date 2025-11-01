@@ -1,0 +1,530 @@
+[
+  {
+    "id": "6c",
+    "query": "我今年年假还剩几天？",
+    "expected": "/hr/leave/balance",
+    "predicted": "/hr/leave/balance",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "07",
+    "query": "我还有病假吗？",
+    "expected": "/hr/leave/balance",
+    "predicted": "/hr/leave/balance",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "31",
+    "query": "查一下假期余额",
+    "expected": "/hr/leave/balance",
+    "predicted": "/hr/leave/balance",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "f6",
+    "query": "我要请年假",
+    "expected": "other",
+    "predicted": "/hr/leave/apply",
+    "pass": false,
+    "error": "应是【other】，实际识别为【请假申请】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "b4",
+    "query": "我想请11月3号到11月4号的年假",
+    "expected": "/hr/leave/apply",
+    "predicted": "/hr/leave/apply",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "9e",
+    "query": "我要请婚假",
+    "expected": "/hr/leave/apply",
+    "predicted": "/hr/leave/apply",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "ac",
+    "query": "帮我申请明天一天病假",
+    "expected": "/hr/leave/apply",
+    "predicted": "/hr/leave/apply",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "30",
+    "query": "还有几天假",
+    "expected": "other",
+    "predicted": "/hr/leave/balance",
+    "pass": false,
+    "error": "应是【other】，实际识别为【假期余额查询】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "0d",
+    "query": "婚假几天",
+    "expected": "/hr/policy",
+    "predicted": "/hr/policy",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "c6",
+    "query": "节假日安排",
+    "expected": "/hr/policy",
+    "predicted": "/hr/leave/balance",
+    "pass": false,
+    "error": "应是【HR 政策查询】，实际识别为【假期余额查询】（误将政策问题识别为请假操作）。"
+  },
+  {
+    "id": "94",
+    "query": "公司请假制度是什么？",
+    "expected": "/hr/policy",
+    "predicted": "/hr/leave/policy",
+    "pass": false,
+    "error": "应是【HR 政策查询】，实际识别为【/hr/leave/policy】（误将政策问题识别为请假操作）。"
+  },
+  {
+    "id": "bc",
+    "query": "帮我请假",
+    "expected": "other",
+    "predicted": "/hr/leave/apply",
+    "pass": false,
+    "error": "应是【other】，实际识别为【请假申请】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "28",
+    "query": "公司有哪些福利？",
+    "expected": "/hr/benefits/list",
+    "predicted": "/hr/benefits/list",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "60",
+    "query": "有餐补吗？",
+    "expected": "/hr/benefits/list",
+    "predicted": "/hr/benefits/list",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "3d",
+    "query": "员工福利包含什么？",
+    "expected": "/hr/benefits/list",
+    "predicted": "/hr/benefits/list",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "88",
+    "query": "我要报销交通费",
+    "expected": "other",
+    "predicted": "/hr/expense/submit",
+    "pass": false,
+    "error": "应是【other】，实际识别为【报销申请】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "da",
+    "query": "我要申请生日礼金",
+    "expected": "/hr/benefits/apply",
+    "predicted": "/hr/benefits/apply",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "c1",
+    "query": "怎么领节日礼品？",
+    "expected": "/hr/benefits/apply",
+    "predicted": "/hr/benefits/apply",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "5b",
+    "query": "公司福利政策是什么？",
+    "expected": "other",
+    "predicted": "/hr/benefits/list",
+    "pass": false,
+    "error": "应是【other】，实际识别为【福利清单查询】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "9d",
+    "query": "帮我报销住宿费用500元",
+    "expected": "/hr/expense/submit",
+    "predicted": "/hr/expense/submit",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "0d",
+    "query": "提交出差餐费报销",
+    "expected": "/hr/expense/submit",
+    "predicted": "/hr/expense/submit",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "40",
+    "query": "我想报销机票费用",
+    "expected": "/hr/expense/submit",
+    "predicted": "/hr/expense/submit",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "1b",
+    "query": "报销政策是什么",
+    "expected": "other",
+    "predicted": "/hr/expense/submit",
+    "pass": false,
+    "error": "应是【other】，实际识别为【报销申请】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "3b",
+    "query": "出差报销标准是什么？",
+    "expected": "/hr/travel/policy",
+    "predicted": "/hr/travel/policy",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "cd",
+    "query": "住宿标准是多少？",
+    "expected": "/hr/travel/policy",
+    "predicted": "/hr/travel/policy",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "1a",
+    "query": "帮我报销住宿",
+    "expected": "other",
+    "predicted": "/hr/expense/submit",
+    "pass": false,
+    "error": "应是【other】，实际识别为【报销申请】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "ae",
+    "query": "帮我申请下周去上海出差",
+    "expected": "/hr/travel/apply",
+    "predicted": "/hr/travel/apply",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "87",
+    "query": "我要出差去北京",
+    "expected": "/hr/travel/apply",
+    "predicted": "/hr/travel/apply",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "19",
+    "query": "出差标准是多少",
+    "expected": "other",
+    "predicted": "/hr/travel/policy",
+    "pass": false,
+    "error": "应是【other】，实际识别为【差旅政策查询】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "e0",
+    "query": "我打卡上班",
+    "expected": "/hr/attendance/checkin",
+    "predicted": "/hr/attendance/checkin",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "0b",
+    "query": "上班签到",
+    "expected": "/hr/attendance/checkin",
+    "predicted": "/hr/attendance/checkin",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "ff",
+    "query": "请假打卡流程是什么",
+    "expected": "other",
+    "predicted": "/hr/attendance/checkin",
+    "pass": false,
+    "error": "应是【other】，实际识别为【打卡签到】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "c2",
+    "query": "我今天打卡了吗？",
+    "expected": "/hr/attendance/status",
+    "predicted": "/hr/attendance/status",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "c5",
+    "query": "查一下昨天出勤记录",
+    "expected": "/hr/attendance/status",
+    "predicted": "/hr/attendance/status",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "1f",
+    "query": "怎么打卡？",
+    "expected": "other",
+    "predicted": "/hr/attendance/checkin",
+    "pass": false,
+    "error": "应是【other】，实际识别为【打卡签到】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "9b",
+    "query": "查一下我9月份工资",
+    "expected": "/hr/payroll/info",
+    "predicted": "/hr/payroll/info",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "ab",
+    "query": "本月薪资到账了吗？",
+    "expected": "/hr/payroll/info",
+    "predicted": "/hr/payroll/info",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "26",
+    "query": "工资调整政策是什么？",
+    "expected": "other",
+    "predicted": "/hr/policy",
+    "pass": false,
+    "error": "应是【other】，实际识别为【HR 政策查询】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "52",
+    "query": "查一下我的个税",
+    "expected": "/hr/payroll/tax",
+    "predicted": "/hr/payroll/tax",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "ad",
+    "query": "社保缴费明细",
+    "expected": "/hr/payroll/tax",
+    "predicted": "/hr/payroll/tax",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "24",
+    "query": "我要调整工资",
+    "expected": "other",
+    "predicted": "/hr/payroll/info",
+    "pass": false,
+    "error": "应是【other】，实际识别为【工资查询】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "8a",
+    "query": "查看我的人事档案",
+    "expected": "/hr/profile/view",
+    "predicted": "/hr/profile/view",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "af",
+    "query": "我在哪个部门？",
+    "expected": "/hr/profile/view",
+    "predicted": "/hr/profile/view",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "7f",
+    "query": "查下我的入职日期",
+    "expected": "/hr/profile/view",
+    "predicted": "/hr/profile/view",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "07",
+    "query": "我要修改个人信息",
+    "expected": "other",
+    "predicted": "/hr/profile/update",
+    "pass": false,
+    "error": "应是【other】，实际识别为【个人信息修改】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "47",
+    "query": "修改我的联系电话",
+    "expected": "/hr/profile/update",
+    "predicted": "/hr/profile/update",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "f1",
+    "query": "更新家庭住址",
+    "expected": "/hr/profile/update",
+    "predicted": "/hr/profile/update",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "40",
+    "query": "查看我的人事档案",
+    "expected": "other",
+    "predicted": "/hr/profile/view",
+    "pass": false,
+    "error": "应是【other】，实际识别为【个人档案查看】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "9e",
+    "query": "最近有哪些培训？",
+    "expected": "/hr/training/list",
+    "predicted": "/hr/training/list",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "93",
+    "query": "我能参加什么课程？",
+    "expected": "/hr/training/list",
+    "predicted": "/hr/training/list",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "46",
+    "query": "我想报名领导力培训",
+    "expected": "other",
+    "predicted": "/hr/training/apply",
+    "pass": false,
+    "error": "应是【other】，实际识别为【培训报名】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "4a",
+    "query": "报名领导力培训",
+    "expected": "/hr/training/apply",
+    "predicted": "/hr/training/apply",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "ea",
+    "query": "我想参加安全教育培训",
+    "expected": "/hr/training/apply",
+    "predicted": "/hr/training/list",
+    "pass": false,
+    "error": "应是【培训报名】，实际识别为【培训课程列表查询】，两者路径相似（0.80），可能是路由混淆。"
+  },
+  {
+    "id": "48",
+    "query": "培训政策是什么",
+    "expected": "other",
+    "predicted": "/hr/policy",
+    "pass": false,
+    "error": "应是【other】，实际识别为【HR 政策查询】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "b7",
+    "query": "我想内推一个朋友",
+    "expected": "/hr/recruitment/referral",
+    "predicted": "/hr/recruitment/referral",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "95",
+    "query": "推荐候选人张三",
+    "expected": "/hr/recruitment/referral",
+    "predicted": "/hr/recruitment/referral",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "c2",
+    "query": "招聘岗位有哪些？",
+    "expected": "other",
+    "predicted": "/hr/recruitment/openings",
+    "pass": false,
+    "error": "应是【other】，实际识别为【招聘岗位查询】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "fc",
+    "query": "现在有哪些招聘职位？",
+    "expected": "/hr/recruitment/openings",
+    "predicted": "/hr/recruitment/openings",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "05",
+    "query": "技术部在招人吗？",
+    "expected": "/hr/recruitment/openings",
+    "predicted": "/hr/recruitment/openings",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "30",
+    "query": "我想推荐朋友来面试",
+    "expected": "other",
+    "predicted": "/hr/recruitment/referral",
+    "pass": false,
+    "error": "应是【other】，实际识别为【内推推荐】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "bf",
+    "query": "查看我的劳动合同",
+    "expected": "/hr/contract/view",
+    "predicted": "/hr/contract/view",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "d2",
+    "query": "合同到期时间是多久？",
+    "expected": "/hr/contract/view",
+    "predicted": "/hr/contract/view",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "54",
+    "query": "我要签合同",
+    "expected": "other",
+    "predicted": "/hr/contract/view",
+    "pass": false,
+    "error": "应是【other】，实际识别为【合同查看】，请检查路由匹配逻辑。"
+  },
+  {
+    "id": "a0",
+    "query": "我要续签合同",
+    "expected": "/hr/contract/renew",
+    "predicted": "/hr/contract/renew",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "6a",
+    "query": "延长劳动合同一年",
+    "expected": "/hr/contract/renew",
+    "predicted": "/hr/contract/renew",
+    "pass": true,
+    "error": ""
+  },
+  {
+    "id": "e9",
+    "query": "查看合同信息",
+    "expected": "other",
+    "predicted": "/hr/contract/view",
+    "pass": false,
+    "error": "应是【other】，实际识别为【合同查看】，请检查路由匹配逻辑。"
+  }
+]

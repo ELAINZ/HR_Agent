@@ -1,0 +1,182 @@
+[
+  {
+    "api": "/hr/leave/balance",
+    "purpose": "查询员工剩余假期天数",
+    "params": ["employee_id"],
+    "examples": {
+      "positive": ["我今年年假还剩几天？", "我还有病假吗？", "查一下假期余额"],
+      "negative": ["我要请年假"]
+    }
+  },
+  {
+    "api": "/hr/leave/apply",
+    "purpose": "提交请假申请",
+    "params": ["employee_id", "leave_type", "start_date", "end_date"],
+    "examples": {
+      "positive": ["我想请11月3号到11月4号的年假", "我要请婚假", "帮我申请明天一天病假"],
+      "negative": ["还有几天假"]
+    }
+  },
+  {
+    "api": "/hr/policy",
+    "purpose": "查询HR政策（婚假、福利、年假等）",
+    "params": ["topic"],
+    "examples": {
+      "positive": ["婚假几天", "节假日安排", "公司请假制度是什么？"],
+      "negative": ["帮我请假"]
+    }
+  },
+  {
+    "api": "/hr/benefits/list",
+    "purpose": "查询公司福利清单（餐补、交通补贴、节日礼金等）",
+    "params": ["employee_id"],
+    "examples": {
+      "positive": ["公司有哪些福利？", "有餐补吗？", "员工福利包含什么？"],
+      "negative": ["我要报销交通费"]
+    }
+  },
+  {
+    "api": "/hr/benefits/apply",
+    "purpose": "申请或领取福利（例如生日礼金、节日补贴）",
+    "params": ["employee_id", "benefit_type"],
+    "examples": {
+      "positive": ["我要申请生日礼金", "怎么领节日礼品？"],
+      "negative": ["公司福利政策是什么？"]
+    }
+  },
+  {
+    "api": "/hr/expense/submit",
+    "purpose": "提交报销申请",
+    "params": ["employee_id", "amount", "category", "voucher_id"],
+    "examples": {
+      "positive": ["帮我报销住宿费用500元", "提交出差餐费报销", "我想报销机票费用"],
+      "negative": ["报销政策是什么"]
+    }
+  },
+  {
+    "api": "/hr/travel/policy",
+    "purpose": "查询差旅相关政策与标准",
+    "params": ["topic"],
+    "examples": {
+      "positive": ["出差报销标准是什么？", "住宿标准是多少？"],
+      "negative": ["帮我报销住宿"]
+    }
+  },
+  {
+    "api": "/hr/travel/apply",
+    "purpose": "提交出差申请",
+    "params": ["employee_id", "destination", "start_date", "end_date"],
+    "examples": {
+      "positive": ["帮我申请下周去上海出差", "我要出差去北京"],
+      "negative": ["出差标准是多少"]
+    }
+  },
+  {
+    "api": "/hr/attendance/checkin",
+    "purpose": "记录上班打卡",
+    "params": ["employee_id", "timestamp"],
+    "examples": {
+      "positive": ["我打卡上班", "上班签到"],
+      "negative": ["请假打卡流程是什么"]
+    }
+  },
+  {
+    "api": "/hr/attendance/status",
+    "purpose": "查询打卡与出勤状态",
+    "params": ["employee_id", "date"],
+    "examples": {
+      "positive": ["我今天打卡了吗？", "查一下昨天出勤记录"],
+      "negative": ["怎么打卡？"]
+    }
+  },
+  {
+    "api": "/hr/payroll/info",
+    "purpose": "查询员工工资信息",
+    "params": ["employee_id", "month"],
+    "examples": {
+      "positive": ["查一下我9月份工资", "本月薪资到账了吗？"],
+      "negative": ["工资调整政策是什么？"]
+    }
+  },
+  {
+    "api": "/hr/payroll/tax",
+    "purpose": "查询个税与社保缴纳信息",
+    "params": ["employee_id", "month"],
+    "examples": {
+      "positive": ["查一下我的个税", "社保缴费明细"],
+      "negative": ["我要调整工资"]
+    }
+  },
+  {
+    "api": "/hr/profile/view",
+    "purpose": "查看个人档案信息（岗位、部门、入职日期等）",
+    "params": ["employee_id"],
+    "examples": {
+      "positive": ["查看我的人事档案", "我在哪个部门？", "查下我的入职日期"],
+      "negative": ["我要修改个人信息"]
+    }
+  },
+  {
+    "api": "/hr/profile/update",
+    "purpose": "修改个人资料（地址、联系方式等）",
+    "params": ["employee_id", "field", "value"],
+    "examples": {
+      "positive": ["修改我的联系电话", "更新家庭住址"],
+      "negative": ["查看我的人事档案"]
+    }
+  },
+  {
+    "api": "/hr/training/list",
+    "purpose": "查询可报名的培训课程",
+    "params": ["employee_id"],
+    "examples": {
+      "positive": ["最近有哪些培训？", "我能参加什么课程？"],
+      "negative": ["我想报名领导力培训"]
+    }
+  },
+  {
+    "api": "/hr/training/apply",
+    "purpose": "报名参加培训课程",
+    "params": ["employee_id", "course_id"],
+    "examples": {
+      "positive": ["报名领导力培训", "我想参加安全教育培训"],
+      "negative": ["培训政策是什么"]
+    }
+  },
+  {
+    "api": "/hr/recruitment/referral",
+    "purpose": "推荐候选人或内推简历",
+    "params": ["employee_id", "candidate_name"],
+    "examples": {
+      "positive": ["我想内推一个朋友", "推荐候选人张三"],
+      "negative": ["招聘岗位有哪些？"]
+    }
+  },
+  {
+    "api": "/hr/recruitment/openings",
+    "purpose": "查询当前招聘岗位信息",
+    "params": ["department"],
+    "examples": {
+      "positive": ["现在有哪些招聘职位？", "技术部在招人吗？"],
+      "negative": ["我想推荐朋友来面试"]
+    }
+  },
+  {
+    "api": "/hr/contract/view",
+    "purpose": "查看劳动合同信息",
+    "params": ["employee_id"],
+    "examples": {
+      "positive": ["查看我的劳动合同", "合同到期时间是多久？"],
+      "negative": ["我要签合同"]
+    }
+  },
+  {
+    "api": "/hr/contract/renew",
+    "purpose": "申请续签劳动合同",
+    "params": ["employee_id", "renew_period"],
+    "examples": {
+      "positive": ["我要续签合同", "延长劳动合同一年"],
+      "negative": ["查看合同信息"]
+    }
+  }
+]

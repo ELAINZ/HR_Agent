@@ -1,0 +1,398 @@
+[
+  {
+    "id": "6c",
+    "query": "我今年年假还剩几天？",
+    "expected_api": "/hr/leave/balance",
+    "label": "positive"
+  },
+  {
+    "id": "07",
+    "query": "我还有病假吗？",
+    "expected_api": "/hr/leave/balance",
+    "label": "positive"
+  },
+  {
+    "id": "31",
+    "query": "查一下假期余额",
+    "expected_api": "/hr/leave/balance",
+    "label": "positive"
+  },
+  {
+    "id": "f6",
+    "query": "我要请年假",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "b4",
+    "query": "我想请11月3号到11月4号的年假",
+    "expected_api": "/hr/leave/apply",
+    "label": "positive"
+  },
+  {
+    "id": "9e",
+    "query": "我要请婚假",
+    "expected_api": "/hr/leave/apply",
+    "label": "positive"
+  },
+  {
+    "id": "ac",
+    "query": "帮我申请明天一天病假",
+    "expected_api": "/hr/leave/apply",
+    "label": "positive"
+  },
+  {
+    "id": "30",
+    "query": "还有几天假",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "0d",
+    "query": "婚假几天",
+    "expected_api": "/hr/policy",
+    "label": "positive"
+  },
+  {
+    "id": "c6",
+    "query": "节假日安排",
+    "expected_api": "/hr/policy",
+    "label": "positive"
+  },
+  {
+    "id": "94",
+    "query": "公司请假制度是什么？",
+    "expected_api": "/hr/policy",
+    "label": "positive"
+  },
+  {
+    "id": "bc",
+    "query": "帮我请假",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "28",
+    "query": "公司有哪些福利？",
+    "expected_api": "/hr/benefits/list",
+    "label": "positive"
+  },
+  {
+    "id": "60",
+    "query": "有餐补吗？",
+    "expected_api": "/hr/benefits/list",
+    "label": "positive"
+  },
+  {
+    "id": "3d",
+    "query": "员工福利包含什么？",
+    "expected_api": "/hr/benefits/list",
+    "label": "positive"
+  },
+  {
+    "id": "88",
+    "query": "我要报销交通费",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "da",
+    "query": "我要申请生日礼金",
+    "expected_api": "/hr/benefits/apply",
+    "label": "positive"
+  },
+  {
+    "id": "c1",
+    "query": "怎么领节日礼品？",
+    "expected_api": "/hr/benefits/apply",
+    "label": "positive"
+  },
+  {
+    "id": "5b",
+    "query": "公司福利政策是什么？",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "9d",
+    "query": "帮我报销住宿费用500元",
+    "expected_api": "/hr/expense/submit",
+    "label": "positive"
+  },
+  {
+    "id": "0d",
+    "query": "提交出差餐费报销",
+    "expected_api": "/hr/expense/submit",
+    "label": "positive"
+  },
+  {
+    "id": "40",
+    "query": "我想报销机票费用",
+    "expected_api": "/hr/expense/submit",
+    "label": "positive"
+  },
+  {
+    "id": "1b",
+    "query": "报销政策是什么",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "3b",
+    "query": "出差报销标准是什么？",
+    "expected_api": "/hr/travel/policy",
+    "label": "positive"
+  },
+  {
+    "id": "cd",
+    "query": "住宿标准是多少？",
+    "expected_api": "/hr/travel/policy",
+    "label": "positive"
+  },
+  {
+    "id": "1a",
+    "query": "帮我报销住宿",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "ae",
+    "query": "帮我申请下周去上海出差",
+    "expected_api": "/hr/travel/apply",
+    "label": "positive"
+  },
+  {
+    "id": "87",
+    "query": "我要出差去北京",
+    "expected_api": "/hr/travel/apply",
+    "label": "positive"
+  },
+  {
+    "id": "19",
+    "query": "出差标准是多少",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "e0",
+    "query": "我打卡上班",
+    "expected_api": "/hr/attendance/checkin",
+    "label": "positive"
+  },
+  {
+    "id": "0b",
+    "query": "上班签到",
+    "expected_api": "/hr/attendance/checkin",
+    "label": "positive"
+  },
+  {
+    "id": "ff",
+    "query": "请假打卡流程是什么",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "c2",
+    "query": "我今天打卡了吗？",
+    "expected_api": "/hr/attendance/status",
+    "label": "positive"
+  },
+  {
+    "id": "c5",
+    "query": "查一下昨天出勤记录",
+    "expected_api": "/hr/attendance/status",
+    "label": "positive"
+  },
+  {
+    "id": "1f",
+    "query": "怎么打卡？",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "9b",
+    "query": "查一下我9月份工资",
+    "expected_api": "/hr/payroll/info",
+    "label": "positive"
+  },
+  {
+    "id": "ab",
+    "query": "本月薪资到账了吗？",
+    "expected_api": "/hr/payroll/info",
+    "label": "positive"
+  },
+  {
+    "id": "26",
+    "query": "工资调整政策是什么？",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "52",
+    "query": "查一下我的个税",
+    "expected_api": "/hr/payroll/tax",
+    "label": "positive"
+  },
+  {
+    "id": "ad",
+    "query": "社保缴费明细",
+    "expected_api": "/hr/payroll/tax",
+    "label": "positive"
+  },
+  {
+    "id": "24",
+    "query": "我要调整工资",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "8a",
+    "query": "查看我的人事档案",
+    "expected_api": "/hr/profile/view",
+    "label": "positive"
+  },
+  {
+    "id": "af",
+    "query": "我在哪个部门？",
+    "expected_api": "/hr/profile/view",
+    "label": "positive"
+  },
+  {
+    "id": "7f",
+    "query": "查下我的入职日期",
+    "expected_api": "/hr/profile/view",
+    "label": "positive"
+  },
+  {
+    "id": "07",
+    "query": "我要修改个人信息",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "47",
+    "query": "修改我的联系电话",
+    "expected_api": "/hr/profile/update",
+    "label": "positive"
+  },
+  {
+    "id": "f1",
+    "query": "更新家庭住址",
+    "expected_api": "/hr/profile/update",
+    "label": "positive"
+  },
+  {
+    "id": "40",
+    "query": "查看我的人事档案",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "9e",
+    "query": "最近有哪些培训？",
+    "expected_api": "/hr/training/list",
+    "label": "positive"
+  },
+  {
+    "id": "93",
+    "query": "我能参加什么课程？",
+    "expected_api": "/hr/training/list",
+    "label": "positive"
+  },
+  {
+    "id": "46",
+    "query": "我想报名领导力培训",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "4a",
+    "query": "报名领导力培训",
+    "expected_api": "/hr/training/apply",
+    "label": "positive"
+  },
+  {
+    "id": "ea",
+    "query": "我想参加安全教育培训",
+    "expected_api": "/hr/training/apply",
+    "label": "positive"
+  },
+  {
+    "id": "48",
+    "query": "培训政策是什么",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "b7",
+    "query": "我想内推一个朋友",
+    "expected_api": "/hr/recruitment/referral",
+    "label": "positive"
+  },
+  {
+    "id": "95",
+    "query": "推荐候选人张三",
+    "expected_api": "/hr/recruitment/referral",
+    "label": "positive"
+  },
+  {
+    "id": "c2",
+    "query": "招聘岗位有哪些？",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "fc",
+    "query": "现在有哪些招聘职位？",
+    "expected_api": "/hr/recruitment/openings",
+    "label": "positive"
+  },
+  {
+    "id": "05",
+    "query": "技术部在招人吗？",
+    "expected_api": "/hr/recruitment/openings",
+    "label": "positive"
+  },
+  {
+    "id": "30",
+    "query": "我想推荐朋友来面试",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "bf",
+    "query": "查看我的劳动合同",
+    "expected_api": "/hr/contract/view",
+    "label": "positive"
+  },
+  {
+    "id": "d2",
+    "query": "合同到期时间是多久？",
+    "expected_api": "/hr/contract/view",
+    "label": "positive"
+  },
+  {
+    "id": "54",
+    "query": "我要签合同",
+    "expected_api": "other",
+    "label": "negative"
+  },
+  {
+    "id": "a0",
+    "query": "我要续签合同",
+    "expected_api": "/hr/contract/renew",
+    "label": "positive"
+  },
+  {
+    "id": "6a",
+    "query": "延长劳动合同一年",
+    "expected_api": "/hr/contract/renew",
+    "label": "positive"
+  },
+  {
+    "id": "e9",
+    "query": "查看合同信息",
+    "expected_api": "other",
+    "label": "negative"
+  }
+]

@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+requests
+langfuse
+jinja2
+pydantic
