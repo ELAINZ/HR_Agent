@@ -29,7 +29,7 @@
     "expected": "other",
     "predicted": "/hr/leave/apply",
     "pass": false,
-    "error": "应是【other】，实际识别为【请假申请】，请检查路由匹配逻辑。"
+    "error": "将非申请类的请假问题误识别为请假申请。"
   },
   {
     "id": "b4",
@@ -61,7 +61,7 @@
     "expected": "other",
     "predicted": "/hr/leave/balance",
     "pass": false,
-    "error": "应是【other】，实际识别为【假期余额查询】，请检查路由匹配逻辑。"
+    "error": "预测错误原因：将简单的假期剩余天数查询误识别为假期余额查询。"
   },
   {
     "id": "0d",
@@ -77,7 +77,7 @@
     "expected": "/hr/policy",
     "predicted": "/hr/leave/balance",
     "pass": false,
-    "error": "应是【HR 政策查询】，实际识别为【假期余额查询】（误将政策问题识别为请假操作）。"
+    "error": "将节假日安排误识别为假期余额查询。"
   },
   {
     "id": "94",
@@ -85,7 +85,7 @@
     "expected": "/hr/policy",
     "predicted": "/hr/leave/policy",
     "pass": false,
-    "error": "应是【HR 政策查询】，实际识别为【/hr/leave/policy】（误将政策问题识别为请假操作）。"
+    "error": "预测错误原因：将政策查询误识别为假期政策查询。"
   },
   {
     "id": "bc",
@@ -93,7 +93,7 @@
     "expected": "other",
     "predicted": "/hr/leave/apply",
     "pass": false,
-    "error": "应是【other】，实际识别为【请假申请】，请检查路由匹配逻辑。"
+    "error": "将请假请求误识别为具体的请假申请操作。"
   },
   {
     "id": "28",
@@ -125,7 +125,7 @@
     "expected": "other",
     "predicted": "/hr/expense/submit",
     "pass": false,
-    "error": "应是【other】，实际识别为【报销申请】，请检查路由匹配逻辑。"
+    "error": "将交通费报销问题误识别为报销申请操作。"
   },
   {
     "id": "da",
@@ -149,7 +149,7 @@
     "expected": "other",
     "predicted": "/hr/benefits/list",
     "pass": false,
-    "error": "应是【other】，实际识别为【福利清单查询】，请检查路由匹配逻辑。"
+    "error": "将公司福利政策问题误识别为查询福利清单。"
   },
   {
     "id": "9d",
@@ -181,7 +181,7 @@
     "expected": "other",
     "predicted": "/hr/expense/submit",
     "pass": false,
-    "error": "应是【other】，实际识别为【报销申请】，请检查路由匹配逻辑。"
+    "error": "将政策查询误识别为报销申请操作。"
   },
   {
     "id": "3b",
@@ -205,7 +205,7 @@
     "expected": "other",
     "predicted": "/hr/expense/submit",
     "pass": false,
-    "error": "应是【other】，实际识别为【报销申请】，请检查路由匹配逻辑。"
+    "error": "将简单的住宿报销请求误识别为复杂的报销申请操作。"
   },
   {
     "id": "ae",
@@ -229,7 +229,7 @@
     "expected": "other",
     "predicted": "/hr/travel/policy",
     "pass": false,
-    "error": "应是【other】，实际识别为【差旅政策查询】，请检查路由匹配逻辑。"
+    "error": "将出差标准问题误识别为差旅政策查询。"
   },
   {
     "id": "e0",
@@ -253,7 +253,7 @@
     "expected": "other",
     "predicted": "/hr/attendance/checkin",
     "pass": false,
-    "error": "应是【other】，实际识别为【打卡签到】，请检查路由匹配逻辑。"
+    "error": "将请假流程问题误识别为打卡签到问题。"
   },
   {
     "id": "c2",
@@ -277,7 +277,7 @@
     "expected": "other",
     "predicted": "/hr/attendance/checkin",
     "pass": false,
-    "error": "应是【other】，实际识别为【打卡签到】，请检查路由匹配逻辑。"
+    "error": "预测错误原因：将通用问题误识别为具体的打卡签到操作。"
   },
   {
     "id": "9b",
@@ -301,7 +301,7 @@
     "expected": "other",
     "predicted": "/hr/policy",
     "pass": false,
-    "error": "应是【other】，实际识别为【HR 政策查询】，请检查路由匹配逻辑。"
+    "error": "将工资调整问题误识别为HR政策查询。"
   },
   {
     "id": "52",
@@ -325,7 +325,7 @@
     "expected": "other",
     "predicted": "/hr/payroll/info",
     "pass": false,
-    "error": "应是【other】，实际识别为【工资查询】，请检查路由匹配逻辑。"
+    "error": "将工资调整问题误识别为工资查询。"
   },
   {
     "id": "8a",
@@ -357,7 +357,7 @@
     "expected": "other",
     "predicted": "/hr/profile/update",
     "pass": false,
-    "error": "应是【other】，实际识别为【个人信息修改】，请检查路由匹配逻辑。"
+    "error": "预测错误原因：模型将修改个人信息的问题错误地识别为具体的个人信息修改API路径。"
   },
   {
     "id": "47",
@@ -381,7 +381,7 @@
     "expected": "other",
     "predicted": "/hr/profile/view",
     "pass": false,
-    "error": "应是【other】，实际识别为【个人档案查看】，请检查路由匹配逻辑。"
+    "error": "将查看人事档案问题误识别为个人档案查看。"
   },
   {
     "id": "9e",
@@ -405,7 +405,7 @@
     "expected": "other",
     "predicted": "/hr/training/apply",
     "pass": false,
-    "error": "应是【other】，实际识别为【培训报名】，请检查路由匹配逻辑。"
+    "error": "将非特定培训报名问题误识别为特定培训报名。"
   },
   {
     "id": "4a",
@@ -421,7 +421,7 @@
     "expected": "/hr/training/apply",
     "predicted": "/hr/training/list",
     "pass": false,
-    "error": "应是【培训报名】，实际识别为【培训课程列表查询】，两者路径相似（0.80），可能是路由混淆。"
+    "error": "将培训报名问题误识别为查询培训课程列表。"
   },
   {
     "id": "48",
@@ -429,7 +429,7 @@
     "expected": "other",
     "predicted": "/hr/policy",
     "pass": false,
-    "error": "应是【other】，实际识别为【HR 政策查询】，请检查路由匹配逻辑。"
+    "error": "将培训政策问题误识别为HR政策查询。"
   },
   {
     "id": "b7",
@@ -453,7 +453,7 @@
     "expected": "other",
     "predicted": "/hr/recruitment/openings",
     "pass": false,
-    "error": "应是【other】，实际识别为【招聘岗位查询】，请检查路由匹配逻辑。"
+    "error": "将普通询问误识别为具体的招聘岗位查询。"
   },
   {
     "id": "fc",
@@ -477,7 +477,7 @@
     "expected": "other",
     "predicted": "/hr/recruitment/referral",
     "pass": false,
-    "error": "应是【other】，实际识别为【内推推荐】，请检查路由匹配逻辑。"
+    "error": "将日常对话误识别为具体的内推推荐操作。"
   },
   {
     "id": "bf",
@@ -501,7 +501,7 @@
     "expected": "other",
     "predicted": "/hr/contract/view",
     "pass": false,
-    "error": "应是【other】，实际识别为【合同查看】，请检查路由匹配逻辑。"
+    "error": "将合同签订问题误识别为合同查看。"
   },
   {
     "id": "a0",
@@ -525,6 +525,6 @@
     "expected": "other",
     "predicted": "/hr/contract/view",
     "pass": false,
-    "error": "应是【other】，实际识别为【合同查看】，请检查路由匹配逻辑。"
+    "error": "预测错误原因：将常规查询误识别为特定功能操作。"
   }
 ]

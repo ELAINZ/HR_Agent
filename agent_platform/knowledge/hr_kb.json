@@ -1,0 +1,26 @@
+[
+  {
+    "id": "policy_leave_annual",
+    "title": "年假政策",
+    "category": "leave",
+    "applicable": "全职员工",
+    "effective_date": "2024-01-01",
+    "content": "员工按工龄享有带薪年假。查询余额走 /hr/leave/balance。申请请假走 /hr/leave/apply。"
+  },
+  {
+    "id": "policy_leave_marriage",
+    "title": "婚假政策",
+    "category": "leave",
+    "applicable": "正式员工",
+    "effective_date": "2024-01-01",
+    "content": "婚假3天。具体以当地法规与公司制度为准。"
+  },
+  {
+    "id": "policy_travel_flight",
+    "title": "差旅机票标准",
+    "category": "travel",
+    "applicable": "全体员工",
+    "effective_date": "2024-03-01",
+    "content": "经理以下经济舱，高管公务舱。住宿标准按城市级别执行。"
+  }
+]
