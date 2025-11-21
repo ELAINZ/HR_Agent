@@ -1,6 +1,10 @@
-fastapi
-uvicorn
+flask
+flask-cors
+flask-sqlalchemy
+pymysql
+cryptography
 requests
 langfuse
 jinja2
 pydantic
+python-dotenv
