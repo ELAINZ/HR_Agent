@@ -4,12 +4,27 @@ from datetime import datetime, date, timedelta
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-# 添加项目根目录到路径
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
+# 添加项目根目录到路径（确保在开头，优先级最高）
+_project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
 
-from agent_platform.knowledge.retriever import TfidfRAG
-from agent_platform.utils.config import Config
-from poc.hr.models import db, Employee, LeaveBalance, Leave, Attendance, Expense, Payroll, Travel, Contract
+# 调试：检查路径和模块
+if os.getenv("DEBUG", "").lower() in ("1", "true", "yes"):
+    print(f"[DEBUG] 项目根目录: {_project_root}")
+    print(f"[DEBUG] agent_platform 路径: {os.path.join(_project_root, 'agent_platform')}")
+    print(f"[DEBUG] agent_platform 存在: {os.path.exists(os.path.join(_project_root, 'agent_platform'))}")
+
+try:
+    from agent_platform.knowledge.retriever import TfidfRAG
+    from agent_platform.utils.config import Config
+    from poc.hr.models import db, Employee, LeaveBalance, Leave, Attendance, Expense, Payroll, Travel, Contract
+except ImportError as e:
+    print(f"[错误] 模块导入失败: {e}")
+    print(f"[错误] 当前工作目录: {os.getcwd()}")
+    print(f"[错误] Python 路径: {sys.path[:3]}")  # 只显示前3个
+    print(f"[错误] 请确保在项目根目录运行，或使用启动脚本: scripts/start_flask_api.sh")
+    raise
 from dotenv import load_dotenv
 import uuid
 
@@ -19,7 +34,8 @@ app = Flask(__name__)
 CORS(app)  # 允许跨域请求
 
 # 配置数据库
-app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
+config = Config()
+app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_recycle': 300,
@@ -643,6 +659,375 @@ def contract_renew():
         "renew_period": renew_period,
         "status": "renewed"
     })
+
+
+# ========== 评估和LLM测试 ==========
+@app.route("/eval/llm/route", methods=["POST"])
+def llm_route_test():
+    """LLM路由测试：输入用户查询，返回路由结果"""
+    data = request.get_json() if request.is_json else {}
+    query = data.get("query", "")
+    
+    if not query:
+        return jsonify({"error": "缺少query参数"}), 400
+    
+    try:
+        from agent_platform.router.llm_router import LLMRouter
+        router = LLMRouter()
+        predicted_api = router.plan(query)
+        
+        return jsonify({
+            "query": query,
+            "predicted_api": predicted_api,
+            "status": "success"
+        })
+    except Exception as e:
+        return jsonify({
+            "error": str(e),
+            "status": "error"
+        }), 500
+
+
+@app.route("/eval/run", methods=["POST"])
+def run_evaluation():
+    """运行评估测试"""
+    data = request.get_json() if request.is_json else {}
+    test_type = data.get("type", "full")  # full, single
+    
+    try:
+        from agent_platform.router.llm_router import LLMRouter
+        from agent_platform.core.executor import Executor
+        from agent_platform.core.evaluator import Evaluator
+        import json
+        import os
+        
+        router = LLMRouter()
+        executor = Executor()
+        evaluator = Evaluator()
+        
+        # 加载测试用例
+        # flask_server.py 在 poc/hr/apis/，需要向上一级到 poc/hr/，然后进入 tests/
+        testcases_path = os.path.join(os.path.dirname(__file__), "../tests/testcases.json")
+        testcases_path = os.path.abspath(testcases_path)  # 转换为绝对路径
+        with open(testcases_path, "r", encoding="utf-8") as f:
+            cases = json.load(f)
+        
+        if test_type == "single" and "query" in data:
+            # 单条测试
+            query = data.get("query")
+            case = {"id": "test", "query": query, "expected_api": data.get("expected_api", "")}
+            predicted_api = router.plan(query)
+            eval_result = evaluator.evaluate(case, predicted_api)
+            return jsonify({
+                "results": [eval_result],
+                "total": 1,
+                "passed": 1 if eval_result.get("pass") else 0,
+                "failed": 0 if eval_result.get("pass") else 1
+            })
+        else:
+            # 完整测试套件
+            results = []
+            for case in cases[:10]:  # 限制前10条，避免超时
+                try:
+                    predicted_api = router.plan(case["query"])
+                    eval_result = evaluator.evaluate(case, predicted_api)
+                    results.append(eval_result)
+                except Exception as e:
+                    results.append({
+                        "id": case.get("id"),
+                        "query": case.get("query"),
+                        "error": str(e),
+                        "pass": False
+                    })
+            
+            passed = sum(1 for r in results if r.get("pass", False))
+            failed = len(results) - passed
+            
+            return jsonify({
+                "results": results,
+                "total": len(results),
+                "passed": passed,
+                "failed": failed,
+                "accuracy": round(passed / len(results) * 100, 2) if results else 0
+            })
+    except Exception as e:
+        return jsonify({
+            "error": str(e),
+            "status": "error"
+        }), 500
+
+
+@app.route("/eval/testcases", methods=["GET"])
+def get_testcases():
+    """获取测试用例列表"""
+    try:
+        import json
+        import os
+        # flask_server.py 在 poc/hr/apis/，需要向上一级到 poc/hr/，然后进入 tests/
+        testcases_path = os.path.join(os.path.dirname(__file__), "../tests/testcases.json")
+        testcases_path = os.path.abspath(testcases_path)  # 转换为绝对路径
+        with open(testcases_path, "r", encoding="utf-8") as f:
+            cases = json.load(f)
+        
+        # 只返回前50条，避免数据过大
+        return jsonify({
+            "testcases": cases[:50],
+            "total": len(cases)
+        })
+    except Exception as e:
+        return jsonify({
+            "error": str(e),
+            "testcases": []
+        }), 500
+
+
+@app.route("/eval/comprehensive", methods=["POST"])
+def run_comprehensive_evaluation():
+    """运行综合评估（路由 + 返回数据 + 幻觉检测）"""
+    data = request.get_json() if request.is_json else {}
+    test_type = data.get("type", "full")  # full, single
+    
+    try:
+        from agent_platform.router.llm_router import LLMRouter
+        from agent_platform.core.executor import Executor
+        from agent_platform.core.evaluator import Evaluator
+        from agent_platform.core.deepeval_metrics import (
+            RouterAccuracyMetric,
+            JSONResponseMetric,
+            HallucinationRuleMetric
+        )
+        import json
+        import os
+        
+        router = LLMRouter()
+        executor = Executor()
+        evaluator = Evaluator()
+        
+        # 加载测试用例和返回规范
+        testcases_path = os.path.join(os.path.dirname(__file__), "../tests/testcases.json")
+        testcases_path = os.path.abspath(testcases_path)
+        
+        response_specs_path = os.path.join(os.path.dirname(__file__), "../tests/response_specs.json")
+        response_specs_path = os.path.abspath(response_specs_path)
+        
+        with open(testcases_path, "r", encoding="utf-8") as f:
+            cases = json.load(f)
+        
+        # 加载返回规范
+        spec_map = {}
+        if os.path.exists(response_specs_path):
+            with open(response_specs_path, "r", encoding="utf-8") as f:
+                specs = json.load(f)
+                for item in specs:
+                    cid = item.get("id")
+                    if cid:
+                        spec_map[cid] = item.get("spec", {})
+        
+        if test_type == "single" and "query" in data:
+            # 单条测试
+            query = data.get("query")
+            case = {"id": "test", "query": query, "expected_api": data.get("expected_api", "")}
+            predicted_api = router.plan(query)
+            
+            # 执行API调用
+            response_json = None
+            try:
+                resp, _latency = executor.execute(case_id="test", query=query, route_plan=predicted_api)
+                response_json = resp
+            except Exception as e:
+                response_json = {"__error__": str(e)}
+            
+            # 评估
+            eval_result = evaluator.evaluate(case, predicted_api)
+            
+            # JSON结构评估 - 对所有有效响应都进行检测
+            response_spec = spec_map.get("test", {})
+            json_score = None
+            
+            if response_json and not response_json.get("__error__"):
+                # 如果有规范配置，进行完整JSON结构评估
+                if response_spec and (response_spec.get("has_keys") or response_spec.get("equals")):
+                    json_metric = JSONResponseMetric()
+                    from deepeval.test_case import LLMTestCase
+                    from json import dumps
+                    test_case = LLMTestCase(
+                        input=query,
+                        actual_output=dumps(response_json, ensure_ascii=False),
+                        expected_output=dumps({
+                            "has_keys": response_spec.get("has_keys", []),
+                            "equals": response_spec.get("equals", {})
+                        }, ensure_ascii=False)
+                    )
+                    json_score = json_metric.measure(test_case)
+                # 如果没有规范，但响应是有效的JSON，进行基础检查
+                elif isinstance(response_json, dict) and len(response_json) > 0:
+                    json_score = 1.0  # 基础通过
+            
+            # 幻觉检测 - 对所有有效响应都进行检测
+            hallucination_score = None
+            
+            if response_json and not response_json.get("__error__"):
+                # 确定幻觉检测的行为类型
+                query_apis = ["/hr/policy", "/hr/travel/policy"]
+                is_query_api = predicted_api in query_apis
+                
+                # 如果有明确的幻觉检测配置，使用配置
+                if response_spec.get("behavior") == "should_not_hallucinate":
+                    behavior_type = "should_not_hallucinate"
+                # 对于查询类API，自动进行严格幻觉检测
+                elif is_query_api:
+                    behavior_type = "should_not_hallucinate"
+                # 对于其他API，也进行基础幻觉检测
+                else:
+                    behavior_type = "should_not_hallucinate"  # 统一使用严格检测
+                
+                # 对所有响应都进行幻觉检测
+                hallucination_metric = HallucinationRuleMetric()
+                from deepeval.test_case import LLMTestCase
+                from json import dumps
+                test_case = LLMTestCase(
+                    input=query,
+                    actual_output=dumps(response_json, ensure_ascii=False),
+                    expected_output=dumps({"behavior": behavior_type}, ensure_ascii=False)
+                )
+                hallucination_score = hallucination_metric.measure(test_case)
+            
+            return jsonify({
+                "results": [{
+                    **eval_result,
+                    "json_score": json_score if json_score is not None else -1,
+                    "hallucination_score": hallucination_score if hallucination_score is not None else -1,
+                    "response": response_json
+                }],
+                "total": 1,
+                "passed": 1 if eval_result.get("pass") else 0,
+                "failed": 0 if eval_result.get("pass") else 1,
+                "json_quality": round(json_score * 100, 2) if json_score is not None else 0,
+                "hallucination_rate": round(hallucination_score * 100, 2) if hallucination_score is not None else 0,
+                "json_tested": 1 if json_score is not None else 0,
+                "hallucination_tested": 1 if hallucination_score is not None else 0
+            })
+        else:
+            # 完整测试套件（限制前10条）
+            results = []
+            json_scores = []
+            hallucination_scores = []
+            
+            for case in cases[:10]:
+                try:
+                    cid = case.get("id")
+                    query = case.get("query")
+                    predicted_api = router.plan(query)
+                    eval_result = evaluator.evaluate(case, predicted_api)
+                    
+                    # 执行API调用
+                    response_json = None
+                    try:
+                        resp, _latency = executor.execute(case_id=cid, query=query, route_plan=predicted_api)
+                        response_json = resp
+                    except Exception as e:
+                        response_json = {"__error__": str(e)}
+                    
+                    # JSON结构评估 - 对所有有效响应都进行检测
+                    response_spec = spec_map.get(cid, {})
+                    json_score = None  # None 表示未测试
+                    
+                    if response_json and not response_json.get("__error__"):
+                        # 如果有规范配置，进行完整JSON结构评估
+                        if response_spec and (response_spec.get("has_keys") or response_spec.get("equals")):
+                            json_metric = JSONResponseMetric()
+                            from deepeval.test_case import LLMTestCase
+                            from json import dumps
+                            test_case = LLMTestCase(
+                                input=query,
+                                actual_output=dumps(response_json, ensure_ascii=False),
+                                expected_output=dumps({
+                                    "has_keys": response_spec.get("has_keys", []),
+                                    "equals": response_spec.get("equals", {})
+                                }, ensure_ascii=False)
+                            )
+                            json_score = json_metric.measure(test_case)
+                        # 如果没有规范，但响应是有效的JSON，进行基础检查
+                        elif isinstance(response_json, dict) and len(response_json) > 0:
+                            # 基础检查：至少应该是一个有效的JSON对象
+                            json_score = 1.0  # 基础通过
+                        
+                        # 记录所有测试的分数（包括基础检查）
+                        if json_score is not None:
+                            json_scores.append(json_score)
+                    
+                    # 幻觉检测 - 对所有有效响应都进行检测
+                    hallucination_score = None  # None 表示未测试
+                    
+                    if response_json and not response_json.get("__error__"):
+                        # 确定幻觉检测的行为类型
+                        # 对于查询类API（可能返回不确定信息），使用严格检测
+                        query_apis = ["/hr/policy", "/hr/travel/policy"]
+                        is_query_api = predicted_api in query_apis
+                        
+                        # 如果有明确的幻觉检测配置，使用配置
+                        if response_spec.get("behavior") == "should_not_hallucinate":
+                            behavior_type = "should_not_hallucinate"
+                        # 对于查询类API，自动进行严格幻觉检测
+                        elif is_query_api:
+                            behavior_type = "should_not_hallucinate"
+                        # 对于其他API，也进行基础幻觉检测（检查是否有明显编造）
+                        else:
+                            # 对于非查询类API，也进行检测，但使用宽松模式
+                            # 检查是否在响应中出现了大量具体数字但没有安全词
+                            behavior_type = "should_not_hallucinate"  # 统一使用严格检测
+                        
+                        # 对所有响应都进行幻觉检测
+                        hallucination_metric = HallucinationRuleMetric()
+                        from deepeval.test_case import LLMTestCase
+                        from json import dumps
+                        test_case = LLMTestCase(
+                            input=query,
+                            actual_output=dumps(response_json, ensure_ascii=False),
+                            expected_output=dumps({"behavior": behavior_type}, ensure_ascii=False)
+                        )
+                        hallucination_score = hallucination_metric.measure(test_case)
+                        hallucination_scores.append(hallucination_score)
+                    
+                    results.append({
+                        **eval_result,
+                        "json_score": json_score if json_score is not None else -1,  # -1 表示未测试
+                        "hallucination_score": hallucination_score if hallucination_score is not None else -1,  # -1 表示未测试
+                        "response": response_json
+                    })
+                except Exception as e:
+                    results.append({
+                        "id": case.get("id"),
+                        "query": case.get("query"),
+                        "error": str(e),
+                        "pass": False,
+                        "json_score": 0,
+                        "hallucination_score": 0
+                    })
+            
+            passed = sum(1 for r in results if r.get("pass", False))
+            failed = len(results) - passed
+            avg_json_score = sum(json_scores) / len(json_scores) * 100 if json_scores else 0
+            avg_hallucination_score = sum(hallucination_scores) / len(hallucination_scores) * 100 if hallucination_scores else 0
+            
+            return jsonify({
+                "results": results,
+                "total": len(results),
+                "passed": passed,
+                "failed": failed,
+                "accuracy": round(passed / len(results) * 100, 2) if results else 0,
+                "json_quality": round(avg_json_score, 2),
+                "hallucination_rate": round(avg_hallucination_score, 2),
+                "json_tested": len(json_scores),
+                "hallucination_tested": len(hallucination_scores)
+            })
+    except Exception as e:
+        import traceback
+        return jsonify({
+            "error": str(e),
+            "traceback": traceback.format_exc(),
+            "status": "error"
+        }), 500
 
 
 # ========== 健康检查 ==========

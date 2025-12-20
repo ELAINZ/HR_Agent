@@ -51,7 +51,7 @@ class LLMRouter:
             ],
             temperature=0,
         )
-        time.sleep(20)
+        # time.sleep(20)  # 移除不必要的延迟
 
         # 提取 LLM 输出结果
         text = resp.choices[0].message.content.strip()

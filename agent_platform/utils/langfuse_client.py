@@ -1,11 +1,24 @@
 import uuid
 from agent_platform.utils.config import Config
-from langfuse import Langfuse, get_client, observe
+
+try:
+    # Langfuse 是可选依赖；在本地 / 测试环境中如果装不对，不影响主流程
+    from langfuse import Langfuse, get_client, observe  # type: ignore
+    _LANGFUSE_AVAILABLE = True
+except Exception as e:  # pragma: no cover - 防御性兜底
+    print(f"[Langfuse] 库导入失败，将在本地模式下运行（不影响功能）：{e}")
+    Langfuse = None  # type: ignore
+    get_client = None  # type: ignore
+    observe = lambda *args, **kwargs: (  # type: ignore
+        (lambda f: f)
+    )
+    _LANGFUSE_AVAILABLE = False
 
 class LangfuseClient:
 
     def __init__(self):
-        if Config.USE_LANGFUSE:
+        # 仅在配置开启且库可用时才真正连接 Langfuse
+        if Config.USE_LANGFUSE and _LANGFUSE_AVAILABLE and Langfuse is not None:
             try:
                 # 建立客户端连接
                 self.client = Langfuse(
@@ -18,7 +31,7 @@ class LangfuseClient:
                 print(f"[Langfuse] Init failed: {e}")
                 self.client = None
         else:
-            print("[Langfuse] Not configured, running local-only mode")
+            print("[Langfuse] Not configured or unavailable, running local-only mode")
             self.client = None
 
     def trace_start(self, name: str, input_data: dict):

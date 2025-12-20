@@ -1,4 +1,12 @@
+import os
+import sys
 import json
+
+# 确保可以从任意工作目录运行：把项目根目录加入 sys.path
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
 from agent_platform.router.basic_router import BasicRouter
 from agent_platform.router.llm_router import LLMRouter
 from agent_platform.core.executor import Executor

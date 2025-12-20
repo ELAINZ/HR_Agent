@@ -1,0 +1,124 @@
+[
+  {
+    "id": "6c",
+    "api": "/hr/leave/balance",
+    "spec": {
+      "has_keys": [
+        "employee_id",
+        "annual_leave_remaining",
+        "sick_leave_remaining"
+      ],
+      "equals": {
+        "employee_id": "E12345"
+      }
+    }
+  },
+  {
+    "id": "07",
+    "api": "/hr/leave/balance",
+    "spec": {
+      "has_keys": [
+        "employee_id",
+        "annual_leave_remaining",
+        "sick_leave_remaining"
+      ]
+    }
+  },
+  {
+    "id": "31",
+    "api": "/hr/leave/balance",
+    "spec": {
+      "has_keys": [
+        "employee_id",
+        "annual_leave_remaining",
+        "sick_leave_remaining"
+      ]
+    }
+  },
+  {
+    "id": "b4",
+    "api": "/hr/leave/apply",
+    "spec": {
+      "has_keys": [
+        "application_id",
+        "status",
+        "message"
+      ]
+    }
+  },
+  {
+    "id": "9e",
+    "api": "/hr/leave/apply",
+    "spec": {
+      "has_keys": [
+        "application_id",
+        "status"
+      ]
+    }
+  },
+  {
+    "id": "ac",
+    "api": "/hr/leave/apply",
+    "spec": {
+      "has_keys": [
+        "application_id",
+        "status"
+      ]
+    }
+  },
+  {
+    "id": "0d",
+    "api": "/hr/policy",
+    "spec": {
+      "has_keys": [
+        "topic",
+        "snippets"
+      ],
+      "behavior": "should_not_hallucinate"
+    }
+  },
+  {
+    "id": "c6",
+    "api": "/hr/policy",
+    "spec": {
+      "has_keys": [
+        "topic",
+        "snippets"
+      ],
+      "behavior": "should_not_hallucinate"
+    }
+  },
+  {
+    "id": "94",
+    "api": "/hr/policy",
+    "spec": {
+      "has_keys": [
+        "topic",
+        "snippets"
+      ],
+      "behavior": "should_not_hallucinate"
+    }
+  },
+  {
+    "id": "28",
+    "api": "/hr/benefits/list",
+    "spec": {
+      "has_keys": [
+        "employee_id",
+        "benefits"
+      ]
+    }
+  },
+  {
+    "id": "60",
+    "api": "/hr/benefits/list",
+    "spec": {
+      "has_keys": [
+        "employee_id",
+        "benefits"
+      ]
+    }
+  }
+]
+
+

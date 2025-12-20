@@ -6,18 +6,43 @@ import os
 import sys
 from datetime import date
 
-# 添加项目根目录到路径
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
+# 添加项目根目录到路径（确保在开头，优先级最高）
+# init_db.py 位于 poc/hr/，需要向上两级到达项目根目录
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_project_root = os.path.normpath(os.path.join(_script_dir, "../.."))
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
 
-from flask import Flask
-from agent_platform.utils.config import Config
-from poc.hr.models import db, Employee, LeaveBalance, Payroll, Contract
+# 调试信息（可通过环境变量启用）
+if os.getenv("DEBUG", "").lower() in ("1", "true", "yes"):
+    print(f"[DEBUG] 脚本目录: {_script_dir}")
+    print(f"[DEBUG] 项目根目录: {_project_root}")
+    print(f"[DEBUG] agent_platform 路径: {os.path.join(_project_root, 'agent_platform')}")
+    print(f"[DEBUG] agent_platform 存在: {os.path.exists(os.path.join(_project_root, 'agent_platform'))}")
+
+try:
+    from flask import Flask
+    from agent_platform.utils.config import Config
+    from poc.hr.models import (
+        db, Employee, LeaveBalance, Payroll, Contract,
+        Leave, Attendance, Expense, Travel
+    )
+except ImportError as e:
+    print(f"[错误] 模块导入失败: {e}")
+    print(f"[错误] 当前工作目录: {os.getcwd()}")
+    print(f"[错误] 脚本文件: {__file__}")
+    print(f"[错误] 脚本目录: {_script_dir}")
+    print(f"[错误] 项目根目录: {_project_root}")
+    print(f"[错误] agent_platform 存在: {os.path.exists(os.path.join(_project_root, 'agent_platform'))}")
+    print(f"[错误] 请确保在项目根目录运行此脚本，或检查 Python 路径配置")
+    raise
 from dotenv import load_dotenv
 
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
+config = Config()
+app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
@@ -34,8 +59,24 @@ def init_database():
             
             # 检查是否已有数据
             if Employee.query.first():
-                print("数据库已有数据，跳过初始化数据")
-                return
+                print("检测到数据库已有数据")
+                response = input("是否清空现有数据并重新初始化？(y/N): ").strip().lower()
+                if response == 'y':
+                    print("正在清空现有数据...")
+                    # 按依赖关系顺序删除
+                    db.session.query(Contract).delete()
+                    db.session.query(Payroll).delete()
+                    db.session.query(LeaveBalance).delete()
+                    db.session.query(Leave).delete()
+                    db.session.query(Attendance).delete()
+                    db.session.query(Expense).delete()
+                    db.session.query(Travel).delete()
+                    db.session.query(Employee).delete()
+                    db.session.commit()
+                    print("✓ 数据已清空")
+                else:
+                    print("跳过初始化数据")
+                    return
             
             # 插入示例数据
             print("正在插入初始数据...")
@@ -60,8 +101,11 @@ def init_database():
                 ),
             ]
             
+            # 先提交员工数据，确保外键约束满足
             for emp in employees:
                 db.session.add(emp)
+            db.session.commit()
+            print("  - 员工数据已提交")
             
             # 创建请假余额
             current_year = date.today().year
@@ -86,6 +130,8 @@ def init_database():
             
             for balance in leave_balances:
                 db.session.add(balance)
+            db.session.commit()
+            print("  - 请假余额数据已提交")
             
             # 创建薪酬记录
             payrolls = [
@@ -109,6 +155,8 @@ def init_database():
             
             for payroll in payrolls:
                 db.session.add(payroll)
+            db.session.commit()
+            print("  - 薪酬数据已提交")
             
             # 创建合同记录
             contracts = [
@@ -128,8 +176,8 @@ def init_database():
             
             for contract in contracts:
                 db.session.add(contract)
-            
             db.session.commit()
+            print("  - 合同数据已提交")
             print("✓ 初始数据插入成功")
             print(f"  - 员工: {len(employees)} 条")
             print(f"  - 请假余额: {len(leave_balances)} 条")

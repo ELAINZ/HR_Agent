@@ -8,3 +8,5 @@ langfuse
 jinja2
 pydantic
 python-dotenv
+openai
+deepeval
