@@ -43,9 +43,9 @@ class LeaveBalance(db.Model):
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     employee_id = db.Column(db.String(50), db.ForeignKey('employees.employee_id'), nullable=False, comment='员工ID')
-    annual_leave_total = db.Column(db.Integer, default=10, comment='年假总额')
+    annual_leave_total = db.Column(db.Integer, default=30, comment='年假总额')
     annual_leave_used = db.Column(db.Integer, default=0, comment='年假已用')
-    sick_leave_total = db.Column(db.Integer, default=5, comment='病假总额')
+    sick_leave_total = db.Column(db.Integer, default=30, comment='病假总额')
     sick_leave_used = db.Column(db.Integer, default=0, comment='病假已用')
     year = db.Column(db.Integer, default=lambda: datetime.now().year, comment='年份')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

@@ -104,9 +104,9 @@ def leave_balance():
                 # 创建默认余额
                 balance = LeaveBalance(
                     employee_id=employee_id,
-                    annual_leave_total=10,
+                    annual_leave_total=30,
                     annual_leave_used=0,
-                    sick_leave_total=5,
+                    sick_leave_total=30,
                     sick_leave_used=0,
                     year=current_year
                 )
@@ -120,8 +120,8 @@ def leave_balance():
     # 回退到默认值
     return jsonify({
         "employee_id": employee_id,
-        "annual_leave_remaining": 7,
-        "sick_leave_remaining": 2
+        "annual_leave_remaining": 30,
+        "sick_leave_remaining": 30
     })
 
 
@@ -715,7 +715,16 @@ def run_evaluation():
         if test_type == "single" and "query" in data:
             # 单条测试
             query = data.get("query")
-            case = {"id": "test", "query": query, "expected_api": data.get("expected_api", "")}
+            expected_api = data.get("expected_api", "")
+            
+            # 如果没有提供expected_api，尝试从测试用例中查找
+            if not expected_api:
+                for case_item in cases:
+                    if case_item.get("query") == query:
+                        expected_api = case_item.get("expected_api", "")
+                        break
+            
+            case = {"id": "test", "query": query, "expected_api": expected_api}
             predicted_api = router.plan(query)
             eval_result = evaluator.evaluate(case, predicted_api)
             return jsonify({
@@ -727,16 +736,35 @@ def run_evaluation():
         else:
             # 完整测试套件
             results = []
-            for case in cases[:10]:  # 限制前10条，避免超时
+            for idx, case in enumerate(cases[:10], 1):  # 限制前10条，避免超时
                 try:
+                    # 确保case有必要的字段
+                    if not case.get("query"):
+                        results.append({
+                            "id": case.get("id", f"case_{idx}"),
+                            "query": "",
+                            "expected": case.get("expected_api", ""),
+                            "predicted": "",
+                            "error": "测试用例缺少query字段",
+                            "pass": False
+                        })
+                        continue
+                    
                     predicted_api = router.plan(case["query"])
                     eval_result = evaluator.evaluate(case, predicted_api)
                     results.append(eval_result)
                 except Exception as e:
+                    import traceback
+                    error_msg = f"{str(e)}"
+                    # 截断过长的错误信息
+                    if len(error_msg) > 500:
+                        error_msg = error_msg[:500] + "..."
                     results.append({
-                        "id": case.get("id"),
-                        "query": case.get("query"),
-                        "error": str(e),
+                        "id": case.get("id", f"case_{idx}"),
+                        "query": case.get("query", ""),
+                        "expected": case.get("expected_api", ""),
+                        "predicted": "",
+                        "error": error_msg,
                         "pass": False
                     })
             
@@ -826,7 +854,16 @@ def run_comprehensive_evaluation():
         if test_type == "single" and "query" in data:
             # 单条测试
             query = data.get("query")
-            case = {"id": "test", "query": query, "expected_api": data.get("expected_api", "")}
+            expected_api = data.get("expected_api", "")
+            
+            # 如果没有提供expected_api，尝试从测试用例中查找
+            if not expected_api:
+                for case_item in cases:
+                    if case_item.get("query") == query:
+                        expected_api = case_item.get("expected_api", "")
+                        break
+            
+            case = {"id": "test", "query": query, "expected_api": expected_api}
             predicted_api = router.plan(query)
             
             # 执行API调用
@@ -913,10 +950,24 @@ def run_comprehensive_evaluation():
             json_scores = []
             hallucination_scores = []
             
-            for case in cases[:10]:
+            for idx, case in enumerate(cases[:10], 1):
                 try:
-                    cid = case.get("id")
+                    # 确保case有必要的字段
+                    cid = case.get("id", f"case_{idx}")
                     query = case.get("query")
+                    if not query:
+                        results.append({
+                            "id": cid,
+                            "query": "",
+                            "expected": case.get("expected_api", ""),
+                            "predicted": "",
+                            "error": "测试用例缺少query字段",
+                            "pass": False,
+                            "json_score": 0,
+                            "hallucination_score": 0
+                        })
+                        continue
+                    
                     predicted_api = router.plan(query)
                     eval_result = evaluator.evaluate(case, predicted_api)
                     
@@ -996,10 +1047,17 @@ def run_comprehensive_evaluation():
                         "response": response_json
                     })
                 except Exception as e:
+                    import traceback
+                    error_msg = f"{str(e)}"
+                    # 截断过长的错误信息
+                    if len(error_msg) > 500:
+                        error_msg = error_msg[:500] + "..."
                     results.append({
-                        "id": case.get("id"),
-                        "query": case.get("query"),
-                        "error": str(e),
+                        "id": case.get("id", f"case_{idx}"),
+                        "query": case.get("query", ""),
+                        "expected": case.get("expected_api", ""),
+                        "predicted": "",
+                        "error": error_msg,
                         "pass": False,
                         "json_score": 0,
                         "hallucination_score": 0

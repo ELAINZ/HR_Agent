@@ -112,17 +112,17 @@ def init_database():
             leave_balances = [
                 LeaveBalance(
                     employee_id="E12345",
-                    annual_leave_total=10,
+                    annual_leave_total=30,  # 默认年假 30 天
                     annual_leave_used=3,
-                    sick_leave_total=5,
+                    sick_leave_total=30,  # 默认病假 30 天
                     sick_leave_used=0,
                     year=current_year
                 ),
                 LeaveBalance(
                     employee_id="E12346",
-                    annual_leave_total=10,
+                    annual_leave_total=30,  # 默认年假 30 天
                     annual_leave_used=0,
-                    sick_leave_total=5,
+                    sick_leave_total=30,  # 默认病假 30 天
                     sick_leave_used=1,
                     year=current_year
                 ),

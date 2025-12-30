@@ -20,21 +20,36 @@ class Evaluator:
         self.model = model
 
     def evaluate(self, case: Dict, predicted_api: str) -> Dict:
-        expected = case.get("expected_api")
-        query = case.get("query")
-        case_id = case.get("id")
+        try:
+            expected = case.get("expected_api")
+            query = case.get("query")
+            case_id = case.get("id")
 
-        passed = (predicted_api == expected)
-        error_reason = "" if passed else self._analyze_error(query, expected, predicted_api)
+            # 规范化字符串比较：去除首尾空格
+            expected_clean = (expected or "").strip()
+            predicted_clean = (predicted_api or "").strip()
+            
+            passed = (predicted_clean == expected_clean)
+            error_reason = "" if passed else self._analyze_error(query, expected_clean, predicted_clean)
 
-        return {
-            "id": case_id,
-            "query": query,
-            "expected": expected,
-            "predicted": predicted_api,
-            "pass": passed,
-            "error": error_reason
-        }
+            return {
+                "id": case_id,
+                "query": query,
+                "expected": expected_clean,
+                "predicted": predicted_clean,
+                "pass": passed,
+                "error": error_reason
+            }
+        except Exception as e:
+            # 如果评估过程中出现任何错误，返回错误结果
+            return {
+                "id": case.get("id", "unknown"),
+                "query": case.get("query", ""),
+                "expected": case.get("expected_api", ""),
+                "predicted": predicted_api or "",
+                "pass": False,
+                "error": f"评估过程出错: {str(e)}"
+            }
 
     def _analyze_error(self, query: str, expected: str, predicted: str) -> str:
         """
@@ -98,10 +113,11 @@ class Evaluator:
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.3,
+                timeout=30  # 设置超时时间，避免长时间等待
             )
-            time.sleep(20)
             reason = resp.choices[0].message.content.strip()
         except Exception as e:
-            reason = f"应是【{name(expected)}】，实际识别为【{name(predicted)}】，请检查路由逻辑。（LLM解释失败：{e}）"
+            # LLM调用失败时，返回基于规则的错误分析
+            reason = f"应是【{name(expected)}】，实际识别为【{name(predicted)}】，请检查路由逻辑。（LLM解释失败：{str(e)[:100]}）"
 
         return reason
